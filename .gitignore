@@ -36,3 +36,11 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Terraform environment-specific variables
+*.tfvars
+!*.tfvars.example
+
+# Terraform generated plan files
+tfplan
+*.plan

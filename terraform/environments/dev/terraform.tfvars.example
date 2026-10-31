@@ -1,0 +1,5 @@
+project_id     = "cloud-native-platform-513310"
+region         = "me-central1"
+zone           = "me-central1-a"
+machine_type   = "e2-standard-2"
+ssh_user_email = "YOUR_GOOGLE_ACCOUNT_EMAIL"
