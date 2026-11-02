@@ -1,0 +1,5 @@
+NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/web-service   ClusterIP   10.99.33.158   <none>        80/TCP    69s
+
+NAME                                               ADDRESSTYPE   PORTS   ENDPOINTS       AGE
+endpointslice.discovery.k8s.io/web-service-zb4h4   IPv4          80      192.168.140.2   69s

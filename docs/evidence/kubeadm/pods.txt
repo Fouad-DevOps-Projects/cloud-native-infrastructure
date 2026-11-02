@@ -1,0 +1,26 @@
+NAMESPACE         NAME                                        READY   STATUS    RESTARTS   AGE     IP                NODE                NOMINATED NODE   READINESS GATES
+calico-system     calico-kube-controllers-6974ffd4b8-j6bfq    1/1     Running   0          18m     192.168.229.133   k8s-control-plane   <none>           <none>
+calico-system     calico-node-b4vbz                           1/1     Running   0          6m7s    10.30.0.12        k8s-worker-2        <none>           <none>
+calico-system     calico-node-ns5ht                           1/1     Running   0          18m     10.30.0.10        k8s-control-plane   <none>           <none>
+calico-system     calico-node-xh84w                           1/1     Running   0          8m3s    10.30.0.11        k8s-worker-1        <none>           <none>
+calico-system     calico-typha-65c99dfbfc-rlk8h               1/1     Running   0          6m2s    10.30.0.11        k8s-worker-1        <none>           <none>
+calico-system     calico-typha-65c99dfbfc-rz9cj               1/1     Running   0          18m     10.30.0.10        k8s-control-plane   <none>           <none>
+calico-system     calico-webhooks-7d655bcb48-8xc59            1/1     Running   0          18m     192.168.229.130   k8s-control-plane   <none>           <none>
+calico-system     calico-webhooks-7d655bcb48-qgs7l            1/1     Running   0          18m     192.168.229.136   k8s-control-plane   <none>           <none>
+calico-system     csi-node-driver-76vv7                       2/2     Running   0          18m     192.168.229.129   k8s-control-plane   <none>           <none>
+calico-system     csi-node-driver-hbzp5                       2/2     Running   0          8m3s    192.168.230.1     k8s-worker-1        <none>           <none>
+calico-system     csi-node-driver-rvdrj                       2/2     Running   0          6m7s    192.168.140.1     k8s-worker-2        <none>           <none>
+calico-system     goldmane-7c87b647d7-bxrsj                   1/1     Running   0          18m     192.168.229.132   k8s-control-plane   <none>           <none>
+calico-system     whisker-656b546d66-tg29v                    2/2     Running   0          17m     192.168.229.131   k8s-control-plane   <none>           <none>
+kube-system       coredns-589f44dc88-b24jh                    1/1     Running   0          20m     192.168.229.134   k8s-control-plane   <none>           <none>
+kube-system       coredns-589f44dc88-m4zqv                    1/1     Running   0          20m     192.168.229.135   k8s-control-plane   <none>           <none>
+kube-system       etcd-k8s-control-plane                      1/1     Running   0          20m     10.30.0.10        k8s-control-plane   <none>           <none>
+kube-system       kube-apiserver-k8s-control-plane            1/1     Running   0          20m     10.30.0.10        k8s-control-plane   <none>           <none>
+kube-system       kube-controller-manager-k8s-control-plane   1/1     Running   0          20m     10.30.0.10        k8s-control-plane   <none>           <none>
+kube-system       kube-proxy-7mb54                            1/1     Running   0          8m3s    10.30.0.11        k8s-worker-1        <none>           <none>
+kube-system       kube-proxy-ffzdf                            1/1     Running   0          6m7s    10.30.0.12        k8s-worker-2        <none>           <none>
+kube-system       kube-proxy-rjsnj                            1/1     Running   0          20m     10.30.0.10        k8s-control-plane   <none>           <none>
+kube-system       kube-scheduler-k8s-control-plane            1/1     Running   0          20m     10.30.0.10        k8s-control-plane   <none>           <none>
+network-test      test-client                                 1/1     Running   0          3m50s   192.168.230.2     k8s-worker-1        <none>           <none>
+network-test      web-server                                  1/1     Running   0          3m50s   192.168.140.2     k8s-worker-2        <none>           <none>
+tigera-operator   tigera-operator-686489b657-94psd            1/1     Running   0          19m     10.30.0.10        k8s-control-plane   <none>           <none>

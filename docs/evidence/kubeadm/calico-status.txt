@@ -1,0 +1,7 @@
+NAME        AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
+apiserver   True        False         False      17m     All objects available
+calico      True        False         False      5m12s   All objects available
+goldmane    True        False         False      17m     All objects available
+ippools     True        False         False      18m     All objects available
+tiers       True        False         False      18m     All objects available
+whisker     True        False         False      17m     All objects available
