@@ -10,6 +10,8 @@
 - `sample-api-ci.yml`: Python tests, Helm lint/template, Docker image build.
 - `sample-api-ci.yml`: publishes a sample API container image to GHCR on main after validation.
 - `security.yml`: Trivy filesystem and configuration checks.
+- Verified [CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769): test, Helm, and image jobs succeeded.
+- Verified [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759): security job succeeded.
 - GitHub Actions execution history is the source of truth for job outcomes, not this document.
 
 ## Not yet established
