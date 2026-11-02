@@ -18,3 +18,8 @@ def test_info():
     response = client.get("/info")
     assert response.status_code == 200
     assert "version" in response.json()
+
+def test_metrics():
+    response = client.get("/metrics")
+    assert response.status_code == 200
+    assert "sample_api_http_requests_total" in response.text
