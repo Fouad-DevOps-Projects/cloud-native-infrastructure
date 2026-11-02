@@ -1,0 +1,12 @@
+NAMESPACE     NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+gmp-system    gmp-operator                        1/1     1            1           18m
+gmp-system    rule-evaluator                      0/0     0            0           18m
+kube-system   autoscaling-metrics-adapter         0/0     0            0           18m
+kube-system   event-exporter-gke                  1/1     1            1           19m
+kube-system   filestore-lock-release-controller   1/1     1            1           19m
+kube-system   konnectivity-agent                  1/1     1            1           19m
+kube-system   konnectivity-agent-autoscaler       1/1     1            1           19m
+kube-system   kube-dns                            1/1     1            1           20m
+kube-system   kube-dns-autoscaler                 1/1     1            1           19m
+kube-system   l7-default-backend                  1/1     1            1           18m
+kube-system   metrics-server-v1.36.0              1/1     1            1           18m

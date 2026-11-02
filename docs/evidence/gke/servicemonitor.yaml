@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"monitoring.coreos.com/v1","kind":"ServiceMonitor","metadata":{"annotations":{},"labels":{"release":"monitoring"},"name":"sample-api","namespace":"monitoring"},"spec":{"endpoints":[{"interval":"30s","path":"/metrics","port":"http"}],"namespaceSelector":{"matchNames":["sample-api"]},"selector":{"matchLabels":{"app.kubernetes.io/name":"sample-api"}}}}
+  creationTimestamp: "2026-11-02T17:04:20Z"
+  generation: 1
+  labels:
+    release: monitoring
+  name: sample-api
+  namespace: monitoring
+  resourceVersion: "1793639060992367000"
+  uid: 1e3fd634-8321-42a6-8fa9-1cb396f2a101
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    port: http
+  namespaceSelector:
+    matchNames:
+    - sample-api
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sample-api

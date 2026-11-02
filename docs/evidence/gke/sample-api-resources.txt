@@ -1,0 +1,9 @@
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/sample-api-sample-api   2/2     2            2           41m
+
+NAME                                         READY   STATUS    RESTARTS   AGE
+pod/sample-api-sample-api-6fbdb7f95c-4d2w5   1/1     Running   0          21m
+pod/sample-api-sample-api-6fbdb7f95c-zdshc   1/1     Running   0          21m
+
+NAME                            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/sample-api-sample-api   ClusterIP   34.118.238.66   <none>        80/TCP    41m
