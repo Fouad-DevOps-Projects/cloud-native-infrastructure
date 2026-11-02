@@ -1,6 +1,6 @@
 # GKE environment
 
-This environment contains an example Terraform-managed Google Kubernetes Engine cluster configuration. GKE provisioning has **not** been performed or validated.
+This environment contains a low-cost, single-zone (zonal Standard) Terraform-managed Google Kubernetes Engine cluster configuration. The default zone is `me-central1-a`, creating one node in its pool rather than one per regional zone. GKE provisioning has **not** been performed or validated.
 
 From this directory:
 
