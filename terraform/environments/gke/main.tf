@@ -2,18 +2,18 @@ terraform {
   required_version = ">= 1.5.0"
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "~> 6.0"
     }
   }
 }
 
 variable "project_id" {
-  type = string
+  type        = string
   description = "Existing billing-enabled Google Cloud project"
 }
 variable "region" {
-  type = string
+  type    = string
   default = "me-central1"
 }
 variable "admin_cidr" {
@@ -26,7 +26,7 @@ variable "admin_cidr" {
 }
 
 variable "cluster_name" {
-  type = string
+  type    = string
   default = "portfolio-gke"
 }
 
