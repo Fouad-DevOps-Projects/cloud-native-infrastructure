@@ -4,13 +4,13 @@
 
 Terraform-provisioned K3s and three-node kubeadm labs on GCP; node readiness, cross-node networking, DNS, rollout and rollback, graceful drain, worker outage and automatic recovery were recorded under `docs/evidence/`. The VMs were later destroyed using Terraform.
 
-## Implemented code, pending execution evidence
+## Implemented code and verified workflow execution
 
 - Python FastAPI sample app and tests
 - Dockerfile, CI Docker build, image publishing workflow
 - Helm chart and Argo CD Application
-- GitHub Actions test and security workflows
-- GKE Terraform starter and monitoring configuration
+- GitHub Actions test and security workflows. [CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) and [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) completed successfully.
+- GKE Terraform starter and monitoring configuration (not live-deployed).
 
 ## Evidence rules
 
