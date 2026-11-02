@@ -12,6 +12,9 @@ spec:
     helm:
       valueFiles:
         - values.yaml
+      valuesObject:
+        imagePullSecrets:
+          - name: ghcr-pull
   destination:
     server: https://kubernetes.default.svc
     namespace: sample-api
