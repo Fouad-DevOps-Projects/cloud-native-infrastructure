@@ -5,7 +5,18 @@
 
 **Terraform-managed Kubernetes on Google Cloud, experimentally validated cluster resilience, and a tested CI/CD + security pipeline with Helm/Argo CD GitOps configuration.**
 
-**[Evidence index](docs/evidence/README.md) · [Architecture diagrams](docs/architecture/portfolio-overview.md) · [CI run: tests/Helm/image](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) · [Security run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759)**
+**[GKE deployment & screenshot gallery](docs/evidence/gke/README.md) · [Architecture diagrams](docs/architecture/portfolio-overview.md) · [All evidence](docs/evidence/README.md) · [CI run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) · [Security run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759)**
+
+## Live deployment showcase
+
+A Google Kubernetes Engine **zonal Standard cluster** was provisioned with Terraform. Argo CD reconciled the application from GitHub to **Synced / Healthy**, with **2/2 FastAPI Pods running**. The application image was pulled from a private GHCR package through a Kubernetes image-pull Secret. Prometheus discovered and scraped **2/2 API endpoints** through a ServiceMonitor; Grafana displayed real request metrics.
+
+[![Real Grafana dashboard from the GKE deployment](docs/evidence/gke/grafana-dashboard.png)](docs/evidence/gke/README.md)
+
+*Real Grafana dashboard from the running GKE environment. See the [visual evidence gallery](docs/evidence/gke/README.md) for GKE, Argo CD, Prometheus, command outputs, and the deployment history.*
+
+> **Deployment evidence is historical.** The screenshots and captured Kubernetes output demonstrate the lab at the time of collection; they do not promise that the cluster remains online. The GHCR credential is intentionally never stored in Git.
+
 
 ## Architecture
 
@@ -37,7 +48,7 @@ flowchart TD
 | Security validation | Active IaC and workload scans passed; historical findings archived separately | [Successful security workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) |
 | Validation | Historical versus pending evidence explicitly distinguished | [Evidence register](docs/validation/README.md) |
 
-**Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters; they have since been destroyed to limit cloud cost. The new application workflows and GitOps configuration are code artifacts; successful pipeline and live Argo CD deployment results must be confirmed in GitHub Actions/a running cluster. GKE, Prometheus and Grafana are architectural follow-on work rather than demonstrated deployments.
+**Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters, later destroyed to limit cost. In November 2026, a live GKE lab validated Argo CD synchronization, FastAPI deployments, Prometheus scraping and Grafana visualization. The evidence gallery contains the recorded outputs and screenshot. Teardown of this GKE cluster must be verified separately; do not infer current running infrastructure from historic evidence.
 
 ## Run locally
 
@@ -81,7 +92,7 @@ kubectl apply -f argocd/applications/sample-api.yaml
 kubectl get applications -n argocd
 ```
 
-The Application points to `helm/sample-api` on main and creates namespace `sample-api`. This is a declarative deployment definition, not a claim of completed live synchronization.
+The Application tracks `helm/sample-api` on main. A live GKE deployment was verified **Synced / Healthy** with two running Pods; see [GKE evidence](docs/evidence/gke/README.md). The registry image is private, so the named `ghcr-pull` Secret must be created separately in each target cluster.
 
 ## Repository layout
 
