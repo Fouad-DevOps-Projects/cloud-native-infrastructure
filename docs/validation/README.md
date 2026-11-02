@@ -8,7 +8,8 @@
 
 ## Automation
 - `sample-api-ci.yml`: Python tests, Helm lint/template, Docker image build.
-- `publish-image.yml`: push a sample API container image to GHCR from main.
+- `sample-api-ci.yml`: publishes a sample API container image to GHCR on main after validation.
+- `security.yml`: Trivy filesystem and configuration checks.
 - GitHub Actions execution history is the source of truth for job outcomes, not this document.
 
 ## Not yet established
