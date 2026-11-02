@@ -1,0 +1,5 @@
+NAME                   DESIRED   CURRENT   READY   AGE
+nginx-app-647cbf5646   0         0         0       7m28s
+nginx-app-67d95f7dd    0         0         0       56s
+nginx-app-6c78dbc9bb   0         0         0       8m44s
+nginx-app-74f8f5669f   3         3         3       2m22s

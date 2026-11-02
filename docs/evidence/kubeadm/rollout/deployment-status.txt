@@ -1,0 +1,2 @@
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-app   3/3     3            3           8m44s
