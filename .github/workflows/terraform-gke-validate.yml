@@ -1,0 +1,35 @@
+name: GKE Terraform validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'terraform/environments/gke/**'
+      - '.github/workflows/terraform-gke-validate.yml'
+  pull_request:
+    paths:
+      - 'terraform/environments/gke/**'
+      - '.github/workflows/terraform-gke-validate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/environments/gke
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.13.5'
+      - name: Check Terraform formatting
+        run: terraform fmt -check
+      - name: Initialize without cloud access
+        run: terraform init -backend=false -input=false
+      - name: Validate Terraform
+        run: terraform validate -no-color
+      - name: Record validation
+        run: |
+          echo 'Terraform syntax and provider schema validated without provisioning GCP resources.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A successful validation does not confirm a plan or live GKE deployment.' >> "$GITHUB_STEP_SUMMARY"
