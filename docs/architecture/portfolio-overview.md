@@ -1,40 +1,44 @@
 # Architecture and verification map
 
-## Historically deployed Kubernetes environment
+## Self-managed Kubernetes experiments (historical)
 
 ```mermaid
 flowchart TD
-  WSL[Windows + WSL workstation] --> IAP[GCP IAP SSH]
-  TF[Terraform] --> NET[GCP VPC + firewall + IAM]
-  NET --> CP[Kubeadm control plane]
+  WSL[WSL developer workstation] --> IAP[GCP IAP SSH]
+  TF[Terraform] --> NET[VPC + firewall + IAM]
+  NET --> CP[kubeadm control plane]
   NET --> W1[Worker 1]
   NET --> W2[Worker 2]
   IAP --> CP
   CP --> W1
   CP --> W2
   W1 <-->|Calico VXLAN| W2
-  W1 -. failed node .-> RECOVERY[ReplicaSet replacement]
+  W1 -. node outage .-> RECOVERY[ReplicaSet replacement]
   RECOVERY --> W2
 ```
 
-Kubernetes v1.36.6, three Compute Engine VMs, Calico VXLAN, CoreDNS and containerd were tested on GCP. The earlier K3s single-node lab was also tested. Both labs were destroyed after capturing experiment evidence.
+The earlier K3s and Kubernetes v1.36.6 three-node kubeadm environments were tested on Compute Engine and later destroyed. See [historical evidence](../evidence/README.md).
 
-## Implemented application delivery
+## Verified GKE delivery and observability (November 2026)
 
 ```mermaid
 flowchart LR
-  SOURCE[GitHub code] --> ACTIONS[GitHub Actions]
-  ACTIONS --> TEST[API tests + Helm lint]
-  ACTIONS --> SEC[Trivy security gates]
-  TEST --> IMG[Container build and GHCR publish]
-  SOURCE --> ARGO[Argo CD Application manifest]
-  ARGO -. requires live cluster .-> K8S[Kubernetes workload]
-  IMG -. pull image .-> K8S
+  DEV[GitHub repository] --> CI[GitHub Actions: tests + Helm + security]
+  CI --> GHCR[Private GitHub Container Registry]
+  TF2[Terraform] --> GKE[GKE Standard zonal cluster]
+  DEV --> ARGO[Argo CD GitOps controller]
+  ARGO --> HELM[Helm Deployment]
+  GHCR -->|Kubernetes imagePullSecret| HELM
+  HELM --> GKE
+  GKE --> API[2 FastAPI Pods, metrics endpoint]
+  API -->|ServiceMonitor| PROM[Prometheus]
+  PROM --> GRAF[Grafana dashboard]
 ```
 
-- CI [run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) completed successfully: tests, Helm and image jobs.
-- Security [run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) completed successfully.
-- Helm chart, Argo CD Application, GKE Terraform and kube-prometheus-stack configuration are repository artifacts. No successful live GKE provisioning, Argo CD sync or Grafana visualization is claimed.
-- Historical lab security findings are preserved as a report-only artifact. Active configuration misconfiguration checks remain blocking.
+The live experiment reached **Argo CD Synced / Healthy**, **2/2 FastAPI Pods Ready**, **2/2 Prometheus scrape targets UP**, and a working Grafana dashboard. [Open the screenshot gallery](../evidence/gke/README.md).
 
-See [Evidence](../evidence/README.md) and [Validation](../validation/README.md).
+- [Successful application CI run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769).
+- [Successful security scan](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759).
+- Historical laboratory security findings are preserved as separate report-only artifacts.
+
+**Lifecycle:** Screenshots show a running environment at the time of capture. Final Terraform teardown has not yet been verified; ongoing availability is not promised.
