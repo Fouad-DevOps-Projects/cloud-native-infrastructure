@@ -16,6 +16,10 @@ variable "region" {
   type    = string
   default = "me-central1"
 }
+variable "zone" {
+  type    = string
+  default = "me-central1-a"
+}
 variable "admin_cidr" {
   type        = string
   description = "Trusted administrator IPv4 CIDR allowed to reach the GKE API, e.g. 203.0.113.10/32"
@@ -37,7 +41,7 @@ provider "google" {
 
 resource "google_container_cluster" "portfolio" {
   name                     = var.cluster_name
-  location                 = var.region
+  location                 = var.zone
   remove_default_node_pool = true
   initial_node_count       = 1
   deletion_protection      = false
@@ -58,7 +62,7 @@ resource "google_container_cluster" "portfolio" {
 
 resource "google_container_node_pool" "primary" {
   name       = "primary"
-  location   = var.region
+  location   = var.zone
   cluster    = google_container_cluster.portfolio.name
   node_count = 1
   node_config {
