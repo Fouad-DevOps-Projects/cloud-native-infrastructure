@@ -23,7 +23,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ghcr.io/${{ github.repository }}/sample-api
+          images: ghcr.io/fouad-devops-projects/cloud-native-infrastructure/sample-api
           tags: |
             type=raw,value=latest
             type=sha,format=short
