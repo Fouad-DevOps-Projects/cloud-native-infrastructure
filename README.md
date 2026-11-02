@@ -1,93 +1,109 @@
 # Cloud Native Infrastructure
 
-![Sample API CI](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml/badge.svg)
+[![Sample API CI](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml)
+[![Publish Sample API Image](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/publish-image.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/publish-image.yml)
 
-**Infrastructure-as-code, self-managed Kubernetes operations, a containerized API, Helm, and GitOps delivery manifests on Google Cloud.**
-
-This repository is designed as a reproducible DevOps/platform-engineering portfolio project. It combines **actual captured GCP lab evidence** with **version-controlled application-delivery implementation**. Features that have not been deployed or validated are not presented as completed production deployments.
+**Terraform-managed Kubernetes infrastructure on Google Cloud, with captured operational evidence and a GitOps-ready sample application.**
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-  GCP[Google Cloud Platform] --> TF[Terraform]
-  TF --> K3S[K3s single-node lab]
-  TF --> KA[kubeadm three-node lab]
-  KA --> CNI[Calico VXLAN networking]
-  KA --> APP[NGINX application resilience tests]
-  GH[GitHub source] --> GA[GitHub Actions]
-  GA --> TEST[FastAPI tests + Helm lint + Docker build]
-  GH --> ARGO[Argo CD desired state]
-  ARGO -. requires running controller .-> CLUSTER[Kubernetes]
-  CHART[Helm sample-api chart] --> ARGO
+  Source[GitHub repository] --> CI[GitHub Actions]
+  CI --> Tests[Python tests + Helm lint + Docker build]
+  CI --> Registry[GHCR container image]
+  Source --> Argo[Argo CD Application]
+  Argo --> K8s[Kubernetes: K3s / kubeadm / GKE target]
+  Registry --> K8s
+  TF[Terraform] --> GCP[GCP VMs, VPC, firewall, IAM]
+  GCP --> K8s
 ```
 
-See [application delivery architecture](docs/architecture/delivery-pipeline.md).
+## Scope and outcomes
 
-## What's included
-
-| Area | Implementation | Evidence |
+| Component | Implementation | Evidence |
 |---|---|---|
-| K3s | Terraform-provisioned GCP lab, app deployment and failure validation | [K3s evidence](docs/evidence/k3s/) |
-| kubeadm | Three-node Kubernetes v1.36.6 cluster, Calico VXLAN, DNS and ClusterIP | [Kubeadm evidence](docs/evidence/kubeadm/) |
-| Kubernetes reliability | Readiness/liveness probes, rolling update, rollback, drain, worker outage and recovery | [Worker-failure runbook](docs/runbooks/kubeadm/worker-failure-recovery.md) |
-| Sample API | FastAPI endpoints, Dockerfile, unit/integration-style endpoint tests | [Source](apps/sample-api/) |
-| CI | GitHub Actions tests, Helm lint/template, container build | [Workflow](.github/workflows/sample-api-ci.yml) |
-| Helm | Parametrized Deployment and ClusterIP Service with probes and security context | [Chart](helm/sample-api/) |
-| GitOps | Declarative Argo CD Application, automated sync and self-heal | [Application manifest](argocd/applications/sample-api.yaml) |
+| GCP K3s | Terraform provisioning, container operations, failure tests | [K3s records](docs/evidence/k3s/) |
+| Three-node kubeadm | Kubernetes 1.36.6, Calico VXLAN, services and DNS | [Kubeadm records](docs/evidence/kubeadm/) |
+| Rollout / rollback | Probes, rolling updates, rollback of invalid image | [Kubeadm records](docs/evidence/kubeadm/) |
+| Node maintenance | Drain, evacuation and uncordon | [Runbooks](docs/runbooks/kubeadm/) |
+| Worker outage | Automatic replacement following node unavailability | [Worker-failure evidence](docs/evidence/kubeadm/worker-failure/) |
+| Sample API | FastAPI, live/ready endpoints, tests, non-root container | [Application](apps/sample-api/) |
+| CI/CD | GitHub Actions test, Helm lint, Docker build, GHCR publication | [Workflows](.github/workflows/) |
+| GitOps | Helm chart and Argo CD Application manifest | [Helm](helm/sample-api/) · [Argo CD](argocd/applications/sample-api.yaml) |
+| Validation | Historical versus pending evidence explicitly distinguished | [Evidence register](docs/validation/README.md) |
 
-## Run the sample API locally
+**Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters; they have since been destroyed to limit cloud cost. The new application workflows and GitOps configuration are code artifacts; successful pipeline and live Argo CD deployment results must be confirmed in GitHub Actions/a running cluster. GKE, Prometheus and Grafana are architectural follow-on work rather than demonstrated deployments.
+
+## Run locally
 
 ```bash
 cd apps/sample-api
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-dev.txt
 python -m pytest -v
-uvicorn main:app --reload --port 8080
-curl http://127.0.0.1:8080/health/ready
+uvicorn main:app --host 0.0.0.0 --port 8080
+curl http://localhost:8080/health/ready
 ```
 
 Docker:
+
 ```bash
 docker build -t sample-api:local apps/sample-api
 docker run --rm -p 8080:8080 sample-api:local
 ```
 
-Helm validation:
+## Deploy with Helm
+
+Requires an accessible Kubernetes cluster, Helm and a published accessible image:
+
 ```bash
 helm lint helm/sample-api
 helm template sample-api helm/sample-api
+helm upgrade --install sample-api helm/sample-api --namespace sample-api --create-namespace
+kubectl rollout status deployment/sample-api-sample-api -n sample-api
+kubectl port-forward svc/sample-api-sample-api 8080:80 -n sample-api
 ```
 
-To deploy, publish a container image to an accessible registry, set `image.repository` and `image.tag` in the Helm values, and apply the chart to a Kubernetes cluster. The default registry/image reference is **not proof an image has been published**. Argo CD configuration requires a running Argo CD installation and a target cluster; a working sync is not claimed without evidence.
+The chart's default GHCR image is published by the `Publish Sample API Image` workflow on main. If the package is private, configure image pull credentials or change package visibility before attempting deployment. For a reproducible release, override `image.tag` with an immutable commit SHA tag rather than `latest`.
 
-## Evidence integrity and cloud costs
+## Deploy with Argo CD
 
-- Real GCP infrastructure tests were executed and saved under `docs/evidence/` before Terraform teardown.
-- The [worker-outage experiment](docs/runbooks/kubeadm/worker-failure-recovery.md) recorded a drop to 1/3 available replicas, automatic replacement on a healthy worker, then restoration to 3/3.
-- The original three-node GCP cluster was **destroyed after evidence collection**; these URLs/configs are not currently a live cluster.
-- GitHub Actions results and badges reflect actual GitHub workflow execution, not simulated tests.
-- GKE and observability are roadmap candidates, not claimed completed implementations.
+After installing Argo CD into the cluster:
 
-## Technology stack
+```bash
+kubectl apply -f argocd/applications/sample-api.yaml
+kubectl get applications -n argocd
+```
 
-GCP · Terraform · Kubernetes · K3s · kubeadm · Calico · Docker · Python/FastAPI · Helm · Argo CD · GitHub Actions
+The Application points to `helm/sample-api` on main and creates namespace `sample-api`. This is a declarative deployment definition, not a claim of completed live synchronization.
 
-## Project layout
+## Repository layout
 
 ```text
-apps/sample-api/               FastAPI source, tests and Dockerfile
-helm/sample-api/               Helm application chart
-argocd/applications/           Argo CD desired state
-.github/workflows/             CI automation
-terraform/environments/        GCP infrastructure configurations
-kubernetes/                    Kubernetes manifests
-docs/evidence/                 Captured real cluster test results
-docs/runbooks/                 Operations and incident documentation
-docs/architecture/             Architecture and delivery diagrams
+.github/workflows/             automated CI and GHCR publishing
+apps/sample-api/               FastAPI application, tests, Dockerfile
+helm/sample-api/               Kubernetes application Helm chart
+argocd/applications/           GitOps Application definition
+terraform/environments/        GCP infrastructure environments
+kubernetes/                    K3s, kubeadm and Kubernetes manifests
+docs/architecture/             architecture and delivery design
+docs/evidence/                 captured historical lab evidence
+docs/runbooks/                 operating and failure recovery procedures
+docs/validation/               evidence register and verification gaps
 ```
 
-## Status
+## Cost controls and lifecycle
 
-**Historical GCP K3s/kubeadm validation complete, with committed evidence.** Application-delivery artifacts are implemented; refer to the GitHub Actions workflow for their actual validation status. A live GKE deployment or Argo CD sync has not been verified.
+Infrastructure is provisioned from Terraform and destroyed after evidence capture. The documented kubeadm lab teardown completed with **10 resources destroyed**, an empty Terraform state and zero Compute Engine instances in the GCP project. Destroying clusters does not erase the committed infrastructure definitions or test evidence.
+
+## Portfolio highlights
+
+- Independently provisioned a three-node Kubernetes cluster with Terraform, networking and IAM security on GCP.
+- Diagnosed cross-node traffic and tested service discovery, deployment rollbacks, planned drain and unplanned worker outage.
+- Captured controller-driven replacement of two Pods and restoration of three available replicas.
+- Added containerized application, automated test/build workflows, Helm packaging and GitOps manifests.
+- Practiced cloud cost hygiene by tearing down tested resources and retaining reproducible documentation.
+
+See [delivery architecture](docs/architecture/delivery-pipeline.md) and the [validation register](docs/validation/README.md) for exact verification status.
