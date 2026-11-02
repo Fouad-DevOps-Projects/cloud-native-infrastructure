@@ -1,92 +1,93 @@
 # Cloud Native Infrastructure
 
-A hands-on cloud and platform engineering project focused on designing,
-provisioning, securing, and operating cloud-native infrastructure on
-Google Cloud Platform.
+![Sample API CI](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml/badge.svg)
 
-## Objectives
+**Infrastructure-as-code, self-managed Kubernetes operations, a containerized API, Helm, and GitOps delivery manifests on Google Cloud.**
 
-- Provision cloud infrastructure using Terraform.
-- Build and operate Kubernetes clusters.
-- Implement GitOps-based application delivery.
-- Automate CI/CD pipelines using GitHub Actions.
-- Apply infrastructure and workload security best practices.
-- Monitor infrastructure and application health.
+This repository is designed as a reproducible DevOps/platform-engineering portfolio project. It combines **actual captured GCP lab evidence** with **version-controlled application-delivery implementation**. Features that have not been deployed or validated are not presented as completed production deployments.
 
-## Technology Stack
+## Architecture
 
-| Area | Technologies |
-|---|---|
-| Cloud | Google Cloud Platform |
-| Infrastructure as Code | Terraform |
-| Containers | Docker |
-| Kubernetes | K3s, kubeadm, GKE |
-| Package Management | Helm |
-| GitOps | Argo CD |
-| CI/CD | GitHub Actions |
-| Monitoring | Prometheus, Grafana |
-| Version Control | Git, GitHub |
+```mermaid
+flowchart TD
+  GCP[Google Cloud Platform] --> TF[Terraform]
+  TF --> K3S[K3s single-node lab]
+  TF --> KA[kubeadm three-node lab]
+  KA --> CNI[Calico VXLAN networking]
+  KA --> APP[NGINX application resilience tests]
+  GH[GitHub source] --> GA[GitHub Actions]
+  GA --> TEST[FastAPI tests + Helm lint + Docker build]
+  GH --> ARGO[Argo CD desired state]
+  ARGO -. requires running controller .-> CLUSTER[Kubernetes]
+  CHART[Helm sample-api chart] --> ARGO
+```
 
-## Learning and Implementation Roadmap
+See [application delivery architecture](docs/architecture/delivery-pipeline.md).
 
-### Phase 1 — K3s on GCP
-- Provision a Compute Engine VM using Terraform.
-- Configure a K3s Kubernetes cluster.
-- Deploy a sample application.
-- Configure networking and security.
+## What's included
 
-### Phase 2 — Kubernetes with kubeadm
-- Build a multi-node Kubernetes cluster.
-- Understand control plane components.
-- Configure networking, certificates, and cluster operations.
+| Area | Implementation | Evidence |
+|---|---|---|
+| K3s | Terraform-provisioned GCP lab, app deployment and failure validation | [K3s evidence](docs/evidence/k3s/) |
+| kubeadm | Three-node Kubernetes v1.36.6 cluster, Calico VXLAN, DNS and ClusterIP | [Kubeadm evidence](docs/evidence/kubeadm/) |
+| Kubernetes reliability | Readiness/liveness probes, rolling update, rollback, drain, worker outage and recovery | [Worker-failure runbook](docs/runbooks/kubeadm/worker-failure-recovery.md) |
+| Sample API | FastAPI endpoints, Dockerfile, unit/integration-style endpoint tests | [Source](apps/sample-api/) |
+| CI | GitHub Actions tests, Helm lint/template, container build | [Workflow](.github/workflows/sample-api-ci.yml) |
+| Helm | Parametrized Deployment and ClusterIP Service with probes and security context | [Chart](helm/sample-api/) |
+| GitOps | Declarative Argo CD Application, automated sync and self-heal | [Application manifest](argocd/applications/sample-api.yaml) |
 
-### Phase 3 — Google Kubernetes Engine
-- Provision a GKE cluster.
-- Configure node pools and autoscaling.
-- Integrate Google Cloud IAM.
+## Run the sample API locally
 
-### Phase 4 — GitOps and CI/CD
-- Build CI pipelines using GitHub Actions.
-- Package applications using Helm.
-- Deploy applications through Argo CD.
+```bash
+cd apps/sample-api
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+python -m pytest -v
+uvicorn main:app --reload --port 8080
+curl http://127.0.0.1:8080/health/ready
+```
 
-### Phase 5 — Observability and Security
-- Deploy Prometheus and Grafana.
-- Implement monitoring and alerting.
-- Apply Kubernetes and cloud security practices.
+Docker:
+```bash
+docker build -t sample-api:local apps/sample-api
+docker run --rm -p 8080:8080 sample-api:local
+```
 
-## Project Status
+Helm validation:
+```bash
+helm lint helm/sample-api
+helm template sample-api helm/sample-api
+```
 
-🚧 In progress — environment setup and architecture design.
+To deploy, publish a container image to an accessible registry, set `image.repository` and `image.tag` in the Helm values, and apply the chart to a Kubernetes cluster. The default registry/image reference is **not proof an image has been published**. Argo CD configuration requires a running Argo CD installation and a target cluster; a working sync is not claimed without evidence.
 
-## Cost Awareness
+## Evidence integrity and cloud costs
 
-Cloud resources will be provisioned only after reviewing the Terraform
-plan and estimated costs. Resources will be shut down or removed when
-they are no longer needed.
+- Real GCP infrastructure tests were executed and saved under `docs/evidence/` before Terraform teardown.
+- The [worker-outage experiment](docs/runbooks/kubeadm/worker-failure-recovery.md) recorded a drop to 1/3 available replicas, automatic replacement on a healthy worker, then restoration to 3/3.
+- The original three-node GCP cluster was **destroyed after evidence collection**; these URLs/configs are not currently a live cluster.
+- GitHub Actions results and badges reflect actual GitHub workflow execution, not simulated tests.
+- GKE and observability are roadmap candidates, not claimed completed implementations.
 
-## Repository Structure
+## Technology stack
+
+GCP · Terraform · Kubernetes · K3s · kubeadm · Calico · Docker · Python/FastAPI · Helm · Argo CD · GitHub Actions
+
+## Project layout
 
 ```text
-.
-├── .github/
-│   └── workflows/
-├── apps/
-│   └── sample-api/
-├── argocd/
-│   └── applications/
-├── docs/
-│   ├── architecture/
-│   ├── decisions/
-│   └── runbooks/
-├── helm/
-├── kubernetes/
-│   ├── gke/
-│   ├── kubeadm/
-│   ├── k3s/
-│   └── namespaces/
-├── scripts/
-└── terraform/
-    ├── environments/
-    │   └── dev/
-    └── modules/
+apps/sample-api/               FastAPI source, tests and Dockerfile
+helm/sample-api/               Helm application chart
+argocd/applications/           Argo CD desired state
+.github/workflows/             CI automation
+terraform/environments/        GCP infrastructure configurations
+kubernetes/                    Kubernetes manifests
+docs/evidence/                 Captured real cluster test results
+docs/runbooks/                 Operations and incident documentation
+docs/architecture/             Architecture and delivery diagrams
+```
+
+## Status
+
+**Historical GCP K3s/kubeadm validation complete, with committed evidence.** Application-delivery artifacts are implemented; refer to the GitHub Actions workflow for their actual validation status. A live GKE deployment or Argo CD sync has not been verified.
