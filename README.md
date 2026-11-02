@@ -3,7 +3,9 @@
 [![Sample API CI](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml)
 [![Security checks](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/security.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/security.yml)
 
-**Terraform-managed Kubernetes infrastructure on Google Cloud, with captured operational evidence and a GitOps-ready sample application.**
+**Terraform-managed Kubernetes on Google Cloud, experimentally validated cluster resilience, and a tested CI/CD + security pipeline with Helm/Argo CD GitOps configuration.**
+
+**[Evidence index](docs/evidence/README.md) · [Architecture diagrams](docs/architecture/portfolio-overview.md) · [CI run: tests/Helm/image](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) · [Security run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759)**
 
 ## Architecture
 
@@ -31,6 +33,8 @@ flowchart TD
 | Sample API | FastAPI, live/ready endpoints, tests, non-root container | [Application](apps/sample-api/) |
 | CI/CD | GitHub Actions test, Helm lint, Docker build, GHCR publication | [Workflows](.github/workflows/) |
 | GitOps | Helm chart and Argo CD Application manifest | [Helm](helm/sample-api/) · [Argo CD](argocd/applications/sample-api.yaml) |
+| CI validation | API test, Helm and image jobs passed | [Successful workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) |
+| Security validation | Active IaC and workload scans passed; historical findings archived separately | [Successful security workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) |
 | Validation | Historical versus pending evidence explicitly distinguished | [Evidence register](docs/validation/README.md) |
 
 **Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters; they have since been destroyed to limit cloud cost. The new application workflows and GitOps configuration are code artifacts; successful pipeline and live Argo CD deployment results must be confirmed in GitHub Actions/a running cluster. GKE, Prometheus and Grafana are architectural follow-on work rather than demonstrated deployments.
@@ -66,7 +70,7 @@ kubectl rollout status deployment/sample-api-sample-api -n sample-api
 kubectl port-forward svc/sample-api-sample-api 8080:80 -n sample-api
 ```
 
-The chart's default GHCR image is published by the `Publish Sample API Image` workflow on main. If the package is private, configure image pull credentials or change package visibility before attempting deployment. For a reproducible release, override `image.tag` with an immutable commit SHA tag rather than `latest`.
+The chart's default GHCR image is published by the `Sample API CI and Image Publishing` workflow on main. If the package is private, configure image pull credentials or change package visibility before attempting deployment. For a reproducible release, override `image.tag` with an immutable commit SHA tag rather than `latest`.
 
 ## Deploy with Argo CD
 
@@ -106,4 +110,4 @@ Infrastructure is provisioned from Terraform and destroyed after evidence captur
 - Added containerized application, automated test/build workflows, Helm packaging and GitOps manifests.
 - Practiced cloud cost hygiene by tearing down tested resources and retaining reproducible documentation.
 
-See [delivery architecture](docs/architecture/delivery-pipeline.md) and the [validation register](docs/validation/README.md) for exact verification status.
+See [end-to-end architecture](docs/architecture/portfolio-overview.md), [evidence index](docs/evidence/README.md), [delivery architecture](docs/architecture/delivery-pipeline.md), and the [validation register](docs/validation/README.md) for verification status.
