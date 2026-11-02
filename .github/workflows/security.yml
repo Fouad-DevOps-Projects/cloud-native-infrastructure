@@ -4,24 +4,73 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
 permissions:
   contents: read
-  security-events: write
+
 jobs:
-  filesystem-and-iac:
+  security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trivy filesystem and IaC scan
+
+      - name: Repository vulnerability and secret scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
-          scanners: vuln,secret,misconfig
+          scanners: vuln,secret
           severity: HIGH,CRITICAL
           exit-code: '1'
           ignore-unfixed: true
-      - name: Upload scan evidence
+
+      - name: Active GKE Terraform misconfiguration scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: terraform/environments/gke
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
+      - name: Render Helm chart
+        uses: azure/setup-helm@v4.3.0
+        with:
+          version: v3.16.4
+      - name: Render active Kubernetes configuration
+        run: |
+          mkdir -p /tmp/active-manifests
+          helm template sample-api helm/sample-api > /tmp/active-manifests/sample-api.yaml
+
+      - name: Active Kubernetes misconfiguration scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: /tmp/active-manifests
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
+      - name: Document historical lab IaC findings
+        if: always()
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: '0'
+          format: json
+          output: historical-misconfiguration-findings.json
+
+      - name: Archive historical findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: historical-lab-security-findings
+          path: historical-misconfiguration-findings.json
+          retention-days: 30
+
+      - name: Explain security boundary
         if: always()
         run: |
-          echo "Security job result is recorded in GitHub Actions logs." >> "$GITHUB_STEP_SUMMARY"
+          echo 'Active GKE and Helm-rendered Kubernetes misconfigurations are blocking checks.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The full-repository configuration scan is reported separately because archived lab examples reflect past experiments.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Full-repository vulnerability and secret scans remain blocking.' >> "$GITHUB_STEP_SUMMARY"
