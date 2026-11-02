@@ -13,6 +13,8 @@ spec:
       valueFiles:
         - values.yaml
       valuesObject:
+        image:
+          tag: sha-192f294e480e7721b7f188892e94d40deccd2c1c
         imagePullSecrets:
           - name: ghcr-pull
   destination:
