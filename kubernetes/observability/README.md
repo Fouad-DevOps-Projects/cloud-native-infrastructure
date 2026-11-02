@@ -9,6 +9,6 @@ helm upgrade --install monitoring prometheus-community/kube-prometheus-stack --n
 kubectl get pods -n monitoring
 ```
 
-The API exposes health routes but **does not yet expose Prometheus metrics**. Do not apply the example ServiceMonitor expecting working metrics until instrumentation and chart Service labels are confirmed. The ServiceMonitor file is a future integration example.
+The API includes a Prometheus `/metrics` endpoint and the Helm Service has the matching label and port. Apply `api-servicemonitor.yaml` after the monitoring chart and sample API are deployed. Confirm actual targets using Prometheus; a ServiceMonitor manifest alone does not verify a successful scrape.
 
 No Grafana dashboard screenshot, active alert, or successful Prometheus scrape is claimed. GitHub code and historical Kubernetes evidence are separate.
