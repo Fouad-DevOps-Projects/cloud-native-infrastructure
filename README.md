@@ -1,7 +1,7 @@
 # Cloud Native Infrastructure
 
 [![Sample API CI](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/sample-api-ci.yml)
-[![Publish Sample API Image](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/publish-image.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/publish-image.yml)
+[![Security checks](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/security.yml/badge.svg)](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/workflows/security.yml)
 
 **Terraform-managed Kubernetes infrastructure on Google Cloud, with captured operational evidence and a GitOps-ready sample application.**
 
