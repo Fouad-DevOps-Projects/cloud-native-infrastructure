@@ -11,9 +11,15 @@
 
 A Google Kubernetes Engine **zonal Standard cluster** was provisioned with Terraform. Argo CD reconciled the application from GitHub to **Synced / Healthy**, with **2/2 FastAPI Pods running**. The application image was pulled from a private GHCR package through a Kubernetes image-pull Secret. Prometheus discovered and scraped **2/2 API endpoints** through a ServiceMonitor; Grafana displayed real request metrics.
 
-[![Real Grafana dashboard from the GKE deployment](docs/evidence/gke/grafana-dashboard.png)](docs/evidence/gke/README.md)
+### GKE · GitOps · Prometheus · Grafana
 
-*Real Grafana dashboard from the running GKE environment. See the [visual evidence gallery](docs/evidence/gke/README.md) for GKE, Argo CD, Prometheus, command outputs, and the deployment history.*
+| GKE infrastructure | GitOps: Synced + Healthy |
+|---|---|
+| [![Terraform-provisioned healthy GKE cluster](docs/evidence/gke/gke-cluster-overview.png)](docs/evidence/gke/gke-cluster-overview.png) | [![Argo CD application synced and healthy](docs/evidence/gke/argocd-resource-tree.png)](docs/evidence/gke/argocd-resource-tree.png) |
+| **Prometheus: both API targets UP** | **Grafana: live metrics dashboard** |
+| [![Prometheus 2 of 2 sample API targets up](docs/evidence/gke/prometheus-targets.png)](docs/evidence/gke/prometheus-targets.png) | [![Grafana API metrics dashboard](docs/evidence/gke/grafana-dashboard.png)](docs/evidence/gke/grafana-dashboard.png) |
+
+[**Open the complete evidence gallery and raw test outputs →**](docs/evidence/gke/README.md)
 
 > **Deployment evidence is historical.** The screenshots and captured Kubernetes output demonstrate the lab at the time of collection; they do not promise that the cluster remains online. The GHCR credential is intentionally never stored in Git.
 
