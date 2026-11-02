@@ -1,0 +1,27 @@
+name: Security checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  filesystem-and-iac:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy filesystem and IaC scan
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true
+      - name: Upload scan evidence
+        if: always()
+        run: |
+          echo "Security job result is recorded in GitHub Actions logs." >> "$GITHUB_STEP_SUMMARY"
