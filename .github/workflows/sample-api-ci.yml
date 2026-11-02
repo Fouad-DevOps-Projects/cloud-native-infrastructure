@@ -58,11 +58,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Normalize image name
+        id: image
+        shell: bash
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}/sample-api" >> "$GITHUB_OUTPUT"
       - name: Build and publish versioned image
         uses: docker/build-push-action@v6
         with:
           context: apps/sample-api
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ghcr.io/${{ github.repository }}/sample-api:latest
-            ghcr.io/${{ github.repository }}/sample-api:sha-${{ github.sha }}
+            ${{ steps.image.outputs.name }}:latest
+            ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
