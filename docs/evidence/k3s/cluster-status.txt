@@ -1,0 +1,37 @@
+NAME         STATUS   ROLES           AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION           CONTAINER-RUNTIME
+k3s-lab-vm   Ready    control-plane   47h   v1.36.5+k3s1   10.20.0.2     <none>        Ubuntu 24.04.5 LTS   7.0.0-1014-gcp (amd64)   containerd://2.3.4-k3s1.36
+NAMESPACE     NAME                                      READY   STATUS    RESTARTS         AGE
+default       broken-nginx-548bcbdc9c-7jppl             1/1     Running   0                47h
+default       config-demo-6cb97bccc9-5n5q4              1/1     Running   47 (3m32s ago)   47h
+default       crash-demo-75d4fd6bb9-6w4j9               1/1     Running   47 (5m57s ago)   47h
+default       nginx-dc7b954b5-4tmcg                     1/1     Running   0                47h
+default       nginx-dc7b954b5-92trn                     1/1     Running   0                47h
+default       nginx-dc7b954b5-vxxdl                     1/1     Running   0                47h
+default       probe-demo-74c7d96b84-bxhbf               1/1     Running   0                46h
+default       secret-volume-demo-f9f79d77d-dt5vl        1/1     Running   46 (57m ago)     46h
+default       volume-demo-794c57f497-6tnd7              1/1     Running   47 (2m6s ago)    47h
+kube-system   coredns-7cfb7bc9c7-98x4k                  1/1     Running   0                47h
+kube-system   local-path-provisioner-77b9867795-lm2wt   1/1     Running   0                47h
+kube-system   metrics-server-6dc596dfb8-mfkq9           1/1     Running   0                47h
+kube-system   svclb-traefik-b00e7e2f-tdhrb              2/2     Running   0                47h
+kube-system   traefik-7c8544f77-tlxcd                   1/1     Running   0                47h
+NAMESPACE     NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+default       deployment.apps/broken-nginx             1/1     1            1           47h
+default       deployment.apps/config-demo              1/1     1            1           47h
+default       deployment.apps/crash-demo               1/1     1            1           47h
+default       deployment.apps/nginx                    3/3     3            3           47h
+default       deployment.apps/probe-demo               1/1     1            1           46h
+default       deployment.apps/secret-volume-demo       1/1     1            1           46h
+default       deployment.apps/volume-demo              1/1     1            1           47h
+kube-system   deployment.apps/coredns                  1/1     1            1           47h
+kube-system   deployment.apps/local-path-provisioner   1/1     1            1           47h
+kube-system   deployment.apps/metrics-server           1/1     1            1           47h
+kube-system   deployment.apps/traefik                  1/1     1            1           47h
+
+NAMESPACE     NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+default       service/kubernetes       ClusterIP      10.43.0.1       <none>        443/TCP                      47h
+default       service/nginx-service    ClusterIP      10.43.201.177   <none>        80/TCP                       47h
+default       service/probe-service    ClusterIP      10.43.126.9     <none>        80/TCP                       46h
+kube-system   service/kube-dns         ClusterIP      10.43.0.10      <none>        53/UDP,53/TCP,9153/TCP       47h
+kube-system   service/metrics-server   ClusterIP      10.43.187.95    <none>        443/TCP                      47h
+kube-system   service/traefik          LoadBalancer   10.43.63.204    10.20.0.2     80:30431/TCP,443:31412/TCP   47h
