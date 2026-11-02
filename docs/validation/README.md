@@ -1,25 +1,27 @@
 # Validation and evidence register
 
-## Confirmed historical tests
-- `docs/evidence/k3s/`: VM-hosted K3s application operations and captured command output.
-- `docs/evidence/kubeadm/`: three-node kubeadm + Calico networking, deployment rollouts and rollback, planned drain, and worker outage recovery.
-- `docs/evidence/kubeadm/worker-failure/`: pre-failure and post-recovery node, Pod, and Deployment states.
-- Cloud lab infrastructure was destroyed by Terraform; the repository is reproducible, but **no live GCP cluster is currently claimed**.
+## Live-tested experiments (recorded)
 
-## Automation
-- `sample-api-ci.yml`: Python tests, Helm lint/template, Docker image build.
-- `sample-api-ci.yml`: publishes a sample API container image to GHCR on main after validation.
-- `security.yml`: Trivy filesystem and configuration checks.
-- Verified [CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769): test, Helm, and image jobs succeeded.
-- Verified [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759): security job succeeded.
-- GitHub Actions execution history is the source of truth for job outcomes, not this document.
+- **K3s and kubeadm:** Historical GCP Kubernetes experiments documented under [evidence](../evidence/README.md), including network validation, rollbacks, worker drain and outage recovery. These older VMs were destroyed after testing.
+- **GKE Standard:** One zonal node was verified `Ready` on 2 November 2026. [Cluster screenshot](../evidence/gke/gke-cluster-overview.png), [kubectl output](../evidence/gke/nodes.txt).
+- **Argo CD:** `sample-api` was observed `Synced` / `Healthy` with 2/2 ready Pods. [Resource tree screenshot](../evidence/gke/argocd-resource-tree.png), [application status](../evidence/gke/argocd-applications.txt).
+- **Private GHCR image:** Authentication via Kubernetes pull Secret and deployment of an immutable SHA-tagged image were verified. Tokens are not in Git.
+- **Prometheus:** Real scrape results from both API replicas, with 2/2 targets UP. [Targets screenshot](../evidence/gke/prometheus-targets.png), [query response](../evidence/gke/prometheus-query.json).
+- **Grafana:** A live dashboard with API request rate, HTTP success counters and healthy target count was recorded. [Dashboard screenshot](../evidence/gke/grafana-dashboard.png).
 
-## Not yet established
-- A successful Argo CD application synchronization has not been captured.
-- GKE cluster creation, monitoring dashboards and alerting are not yet evidenced.
-- HTTP service continuity across the worker outage was not continuously measured.
+## Automated tests
 
-## Suggested proof collection
-1. Save workflow run URL and job result from GitHub Actions.
-2. Run `helm lint helm/sample-api` and `helm template sample-api helm/sample-api` on a test runner.
-3. On a future ephemeral Kubernetes cluster, install Argo CD, apply `argocd/applications/sample-api.yaml`, then capture `kubectl get deployments,pods,svc -n sample-api` and the Argo CD Application status.
+- [Sample API CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769): successful Python, Helm and image jobs.
+- [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759): successful security job, with historical IaC findings reported separately.
+- [GKE Terraform validation](../../.github/workflows/terraform-gke-validate.yml): formatting, initialization and schema validation workflow.
+
+## Not yet verified
+
+- **Teardown of the final GKE lab:** Do not claim deletion without `terraform destroy` output, empty Terraform state and an empty GKE cluster list.
+- An alert firing and notification delivery test was not recorded; the Alertmanager Pod was running, but this is not alert-delivery evidence.
+- Precise HTTP downtime or recovery time during the earlier kubeadm worker failure was not continuously measured.
+- A persistent, always-on production deployment is not claimed.
+
+## Evidence integrity
+
+Screenshots and CLI outputs describe the environment when captured, not its current uptime. Never commit access tokens, Kubernetes Secrets, Terraform state, kubeconfig, or cloud credentials. See the [visual GKE gallery](../evidence/gke/README.md) for proof.
