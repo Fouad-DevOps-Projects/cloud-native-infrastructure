@@ -4,7 +4,7 @@
 
 ## Prerequisites and cost safety
 
-Use a billing-enabled GCP project and enough quota for a regional cluster. This Terraform example uses a **regional** GKE cluster with a node pool `node_count=1` *per zone*, which can create more than one billed node. Check your plan and quotas carefully. Never commit Terraform state, API tokens or kubeconfig files.
+Use a billing-enabled GCP project and enough quota for a regional cluster. This Terraform example uses a **zonal** GKE Standard cluster in `me-central1-a` with one worker node. The cluster and node still incur charges subject to billing credits and applicable free-tier credits. Check your plan and quotas carefully. Never commit Terraform state, API tokens or kubeconfig files.
 
 The GKE API is restricted by `admin_cidr`. Use your trusted current public IPv4 `/32`, not `0.0.0.0/0`. The sample image must be accessible to cluster nodes; a private GHCR package needs an imagePullSecret.
 
@@ -22,7 +22,7 @@ terraform validate
 terraform plan -out=cluster.tfplan -var="project_id=YOUR_PROJECT_ID" -var="admin_cidr=YOUR_PUBLIC_IPV4/32"
 # Review resources and costs before running:
 terraform apply cluster.tfplan
-gcloud container clusters get-credentials portfolio-gke --region me-central1 --project YOUR_PROJECT_ID
+gcloud container clusters get-credentials portfolio-gke --zone me-central1-a --project YOUR_PROJECT_ID
 kubectl get nodes -o wide
 ```
 
