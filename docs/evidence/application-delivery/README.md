@@ -15,12 +15,14 @@ This directory intentionally separates **implemented configuration** from **obse
 
 | Check | Evidence location | Status |
 |---|---|---|
-| API unit tests | GitHub Actions: Sample API CI and Image Publishing | Check run in Actions |
+| API unit tests | GitHub Actions: Sample API CI and Image Publishing | [Passed run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) |
 | Helm lint and rendering | GitHub Actions: helm job | Check run in Actions |
 | Docker image build | GitHub Actions: image job | Check run in Actions |
-| Image pushed to GHCR | GitHub Packages or workflow logs | Requires successful main-branch workflow |
+| Image pushed to GHCR | GitHub Packages or workflow logs | [Passed image job in run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) |
 | Argo CD sync | Screenshot or exported Argo CD status | Not verified |
 | Live API deployment | Kubernetes pod/service output | Not verified |
+
+- [Security run #18 — success](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759). The full-repository historic IaC findings are retained as a non-blocking workflow artifact.
 
 No fabricated CI logs, production metrics, or cloud deployment screenshots are stored here.
 
