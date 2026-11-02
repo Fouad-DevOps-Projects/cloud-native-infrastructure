@@ -1,0 +1,19 @@
+# kube-prometheus-stack Helm chart values (chart dependency installed separately).
+# Local access: kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
+grafana:
+  enabled: true
+  persistence:
+    enabled: false
+prometheus:
+  prometheusSpec:
+    retention: 2d
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+alertmanager:
+  enabled: true
+defaultRules:
+  create: true
