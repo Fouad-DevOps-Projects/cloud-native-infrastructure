@@ -1,0 +1,14 @@
+=== Teardown verification ===
+2026-11-03T03:04:19+02:00
+=== Terraform state ===
+=== GKE clusters ===
+=== Compute instances ===
+Listed 0 items.
+=== Persistent disks ===
+Listed 0 items.
+=== Reserved IP addresses ===
+Listed 0 items.
+=== Forwarding rules ===
+Listed 0 items.
+=== Snapshots ===
+Listed 0 items.
