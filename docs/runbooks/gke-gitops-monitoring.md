@@ -1,10 +1,10 @@
 # Disposable GKE + Argo CD + monitoring demonstration
 
-**Status:** Operator runbook, **not executed**. The repository includes working examples and validation, but no live GKE, Argo CD or monitoring evidence yet.
+**Status:** GKE, Argo CD and monitoring deployment **executed and verified on 2 November 2026**. See the [actual cluster, GitOps, Prometheus and Grafana evidence](../evidence/gke/README.md). This runbook documents reproducible operator commands; it should not be interpreted as a record of every command executed. **Final Terraform teardown has not yet been verified.**
 
 ## Prerequisites and cost safety
 
-Use a billing-enabled GCP project and enough quota for a regional cluster. This Terraform example uses a **zonal** GKE Standard cluster in `me-central1-a` with one worker node. The cluster and node still incur charges subject to billing credits and applicable free-tier credits. Check your plan and quotas carefully. Never commit Terraform state, API tokens or kubeconfig files.
+Use a billing-enabled GCP project and enough quota for a GKE Standard cluster. This Terraform example uses a **zonal** GKE Standard cluster in `me-central1-a` with one worker node. The cluster and node still incur charges subject to billing credits and applicable free-tier credits. Check your plan and quotas carefully. Never commit Terraform state, API tokens or kubeconfig files.
 
 The GKE API is restricted by `admin_cidr`. Use your trusted current public IPv4 `/32`, not `0.0.0.0/0`. The sample image must be accessible to cluster nodes; a private GHCR package needs an imagePullSecret.
 
@@ -81,4 +81,4 @@ gcloud container clusters list --project YOUR_PROJECT_ID
 
 Cloud resource teardown is not guaranteed by deleting repository files. Check billing and networking leftovers (e.g. external load balancers, persistent disks) as well.
 
-Do not report success of GKE, GitOps, or metrics validation until those steps have actually been executed.
+The November 2026 GKE, GitOps and metrics validation is recorded in the evidence gallery. Do not claim the cluster has been destroyed until a successful Terraform destroy and independent GCP inventory checks are captured.

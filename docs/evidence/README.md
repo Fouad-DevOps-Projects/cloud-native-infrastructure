@@ -11,6 +11,7 @@ The portfolio distinguishes historical Kubernetes test output from live GitHub C
 | Worker failure | [Before/after](kubeadm/worker-failure/), [Runbook](../runbooks/kubeadm/worker-failure-recovery.md) | Two replacement Pods on surviving worker, Deployment returned to 3/3 |
 | API tests, Helm, image | [Successful CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) | All three jobs passed |
 | Security | [Successful run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) | Active security gates passed; historical issues archived separately |
+| GKE, Argo CD, Prometheus and Grafana | [Verified GKE evidence gallery](gke/README.md) | GKE node Ready, Argo CD Synced / Healthy, two FastAPI targets UP, live Grafana metrics |
 
 ## Worker failure proof path
 
@@ -20,4 +21,4 @@ The portfolio distinguishes historical Kubernetes test output from live GitHub C
 4. [Rescheduled Pod placement](kubeadm/worker-failure/pods-after-recovery.txt).
 5. [Restored worker node](kubeadm/worker-failure/nodes-after-restoration.txt).
 
-**Evidence limitations:** These snapshots do not establish exact outage duration or HTTP request continuity. No live GKE, Argo CD sync or Prometheus/Grafana dashboard has been verified. The underlying Compute Engine lab VMs were deleted after evidence collection.
+**Evidence limitations:** These snapshots do not establish exact outage duration or HTTP request continuity. GKE, Argo CD sync, Prometheus scraping and Grafana visualization **were verified in November 2026**; see the [GKE evidence gallery](gke/README.md). Final cluster teardown remains pending independent verification. The underlying Compute Engine lab VMs were deleted after evidence collection.

@@ -1,6 +1,6 @@
 # GKE environment
 
-This environment contains a low-cost, single-zone (zonal Standard) Terraform-managed Google Kubernetes Engine cluster configuration. The default zone is `me-central1-a`, creating one node in its pool rather than one per regional zone. GKE provisioning has **not** been performed or validated.
+This environment contains a low-cost, single-zone (zonal Standard) Terraform-managed Google Kubernetes Engine cluster configuration. The default zone is `me-central1-a`, creating one node in its pool rather than one per regional zone. GKE provisioning **was performed and validated on 2 November 2026**. The Terraform-managed `portfolio-gke` zonal cluster, Argo CD deployment, Prometheus scraping and Grafana dashboard are documented in [verified GKE evidence](../../../docs/evidence/gke/README.md). **Teardown is pending verification**; historical screenshots do not imply the cluster remains online.
 
 From this directory:
 
