@@ -1,6 +1,6 @@
 # Evidence index
 
-The portfolio distinguishes historical Kubernetes test output from live GitHub CI checks and unverified deployment configurations.
+This portfolio presents hands-on Kubernetes infrastructure experiments, validated Google Cloud deployments, automated CI/CD and security checks, and real operational evidence. Screenshots, command outputs and runbooks document verified results from K3s, kubeadm and GKE environments, including labs later decommissioned to control costs.
 
 | Area | Evidence | Verified outcome |
 |---|---|---|

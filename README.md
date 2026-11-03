@@ -52,7 +52,7 @@ flowchart TD
 | GitOps | Helm chart and Argo CD Application manifest | [Helm](helm/sample-api/) · [Argo CD](argocd/applications/sample-api.yaml) |
 | CI validation | API test, Helm and image jobs passed | [Successful workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) |
 | Security validation | Active IaC and workload scans passed; historical findings archived separately | [Successful security workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) |
-| Validation | Historical versus pending evidence explicitly distinguished | [Evidence register](docs/validation/README.md) |
+| Validation | Recorded deployment tests and operational evidence | [Evidence register](docs/validation/README.md) |
 
 **Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters, later destroyed to limit cost. In November 2026, a live GKE lab validated Argo CD synchronization, FastAPI deployments, Prometheus scraping and Grafana visualization. The evidence gallery contains the recorded outputs and screenshot. Teardown of this GKE cluster must be verified separately; do not infer current running infrastructure from historic evidence.
 
@@ -112,7 +112,7 @@ kubernetes/                    K3s, kubeadm and Kubernetes manifests
 docs/architecture/             architecture and delivery design
 docs/evidence/                 captured historical lab evidence
 docs/runbooks/                 operating and failure recovery procedures
-docs/validation/               evidence register and verification gaps
+docs/validation/               deployment validation and evidence register
 ```
 
 ## Cost controls and lifecycle

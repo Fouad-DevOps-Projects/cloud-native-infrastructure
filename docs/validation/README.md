@@ -15,7 +15,7 @@
 - [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759): successful security job, with historical IaC findings reported separately.
 - [GKE Terraform validation](../../.github/workflows/terraform-gke-validate.yml): formatting, initialization and schema validation workflow.
 
-## Not yet verified
+## Scope and evidence boundaries
 
 - **Teardown of the final GKE lab:** Do not claim deletion without `terraform destroy` output, empty Terraform state and an empty GKE cluster list.
 - An alert firing and notification delivery test was not recorded; the Alertmanager Pod was running, but this is not alert-delivery evidence.
