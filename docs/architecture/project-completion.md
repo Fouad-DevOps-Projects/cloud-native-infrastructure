@@ -14,11 +14,11 @@ The FastAPI health endpoints and `/metrics` responded. Prometheus discovered and
 
 GitHub Actions automation also passed [CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) and [Security run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759).
 
-## Outstanding closure
+## Verified teardown and remaining boundary
 
-1. **Cost control — highest priority:** Destroy the GKE Terraform deployment, verify empty state and no remaining GKE cluster or Compute Engine workers, and capture sanitized teardown evidence.
-2. Review and update references after resource teardown; historical proof should never be presented as a currently active service.
-3. Optional enhancement: demonstrate an actual alert firing and alert notification. Running Alertmanager alone does not prove alert delivery.
+On **3 November 2026**, `terraform destroy` completed with **2 resources destroyed** (the `primary` node pool and `portfolio-gke` cluster). Follow-up checks found an empty Terraform state and no GKE clusters, Compute Engine instances, persistent disks, reserved IPs, forwarding rules or snapshots in the project. See the [teardown verification](../evidence/gke/teardown/README.md). The repository retains the deployed configuration and captured evidence for reproducibility.
+
+One separately created GCP Secret Manager secret (`sre-ghcr-dockerconfig`) was still present at verification time and is not covered by this Terraform state. Its cleanup requires a separate decision. An actual external Alertmanager notification and continuously measured HTTP downtime were not demonstrated; these are scope boundaries, not failures of the verified deployment.
 
 ## Evidence policy
 

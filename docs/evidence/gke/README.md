@@ -2,7 +2,7 @@
 
 [← Main portfolio README](../../../README.md) · [Architecture](../../architecture/portfolio-overview.md) · [Evidence index](../README.md)
 
-This gallery documents the **real GKE, Argo CD, private GHCR, Prometheus and Grafana deployment** validated in November 2026. Screenshots show the temporary live environment; they are historical evidence, not proof that it remains running.
+This gallery documents the **real GKE, Argo CD, private GHCR, Prometheus and Grafana deployment** validated in November 2026. The lab was **successfully decommissioned on 3 November 2026** after testing; these screenshots are evidence of the deployed environment, not a currently running cluster. [Verified teardown record](teardown/README.md).
 
 ## Observability: Grafana dashboard
 
@@ -59,4 +59,4 @@ This gallery documents the **real GKE, Argo CD, private GHCR, Prometheus and Gra
 
 **Credential safety:** Do not upload GitHub PATs, `argocd-initial-admin-secret`, kubeconfig, Terraform state, or Grafana passwords. Image pull credentials remain inside Kubernetes and are not stored in Git.
 
-**Teardown:** As soon as the evidence is committed, use Terraform destroy from `terraform/environments/gke` and verify all billable resources have been deleted. If the cluster hasn't been destroyed, it continues incurring costs.
+**Teardown verified:** Terraform reported **2 resources destroyed** on 3 November 2026. The state was empty; GCP checks showed no GKE cluster, VM, disk, reserved IP, forwarding rule or snapshot. [Verification and remaining separate secret](teardown/README.md). This does not imply every cloud service or billing item is absent.

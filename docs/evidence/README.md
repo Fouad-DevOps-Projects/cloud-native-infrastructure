@@ -12,6 +12,7 @@ This portfolio presents hands-on Kubernetes infrastructure experiments, validate
 | API tests, Helm, image | [Successful CI run #6](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) | All three jobs passed |
 | Security | [Successful run #18](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) | Active security gates passed; historical issues archived separately |
 | GKE, Argo CD, Prometheus and Grafana | [Verified GKE evidence gallery](gke/README.md) | GKE node Ready, Argo CD Synced / Healthy, two FastAPI targets UP, live Grafana metrics |
+| GKE lab teardown | [Verified deletion record](gke/teardown/README.md) | Terraform 2 resources destroyed; empty state, cluster/VM/disk/forwarding-rule inventories empty on 3 November 2026 |
 
 ## Worker failure proof path
 
@@ -21,4 +22,4 @@ This portfolio presents hands-on Kubernetes infrastructure experiments, validate
 4. [Rescheduled Pod placement](kubeadm/worker-failure/pods-after-recovery.txt).
 5. [Restored worker node](kubeadm/worker-failure/nodes-after-restoration.txt).
 
-**Evidence limitations:** These snapshots do not establish exact outage duration or HTTP request continuity. GKE, Argo CD sync, Prometheus scraping and Grafana visualization **were verified in November 2026**; see the [GKE evidence gallery](gke/README.md). Final cluster teardown remains pending independent verification. The underlying Compute Engine lab VMs were deleted after evidence collection.
+**Evidence limitations:** These snapshots do not establish exact outage duration or HTTP request continuity. GKE, Argo CD sync, Prometheus scraping and Grafana visualization **were verified in November 2026**; see the [GKE evidence gallery](gke/README.md). GKE cluster teardown was independently verified on 3 November 2026; the separately created Secret Manager secret was still present at that time. The underlying Compute Engine lab VMs were deleted after evidence collection.

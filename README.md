@@ -7,7 +7,7 @@
 
 **[GKE deployment & screenshot gallery](docs/evidence/gke/README.md) · [Architecture diagrams](docs/architecture/portfolio-overview.md) · [All evidence](docs/evidence/README.md) · [CI run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41469595769) · [Security run](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759)**
 
-## Live deployment showcase
+## Verified deployment showcase — November 2026
 
 A Google Kubernetes Engine **zonal Standard cluster** was provisioned with Terraform. Argo CD reconciled the application from GitHub to **Synced / Healthy**, with **2/2 FastAPI Pods running**. The application image was pulled from a private GHCR package through a Kubernetes image-pull Secret. Prometheus discovered and scraped **2/2 API endpoints** through a ServiceMonitor; Grafana displayed real request metrics.
 
@@ -21,7 +21,7 @@ A Google Kubernetes Engine **zonal Standard cluster** was provisioned with Terra
 
 [**Open the complete evidence gallery and raw test outputs →**](docs/evidence/gke/README.md)
 
-> **Deployment evidence is historical.** The screenshots and captured Kubernetes output demonstrate the lab at the time of collection; they do not promise that the cluster remains online. The GHCR credential is intentionally never stored in Git.
+> **Deployment lifecycle:** The screenshots and Kubernetes outputs record the successful November 2026 deployment. On **3 November 2026**, Terraform destroyed the GKE node pool and cluster (2 resources). Independent checks found an empty Terraform state and no remaining GKE clusters, VMs, persistent disks, reserved IPs, forwarding rules or snapshots. One separately created Secret Manager secret remained and requires separate review. [Teardown verification](docs/evidence/gke/teardown/README.md). No registry credentials are stored in Git.
 
 
 ## Architecture
@@ -54,7 +54,7 @@ flowchart TD
 | Security validation | Active IaC and workload scans passed; historical findings archived separately | [Successful security workflow](https://github.com/Fouad-DevOps-Projects/cloud-native-infrastructure/actions/runs/41471185759) |
 | Validation | Recorded deployment tests and operational evidence | [Evidence register](docs/validation/README.md) |
 
-**Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters, later destroyed to limit cost. In November 2026, a live GKE lab validated Argo CD synchronization, FastAPI deployments, Prometheus scraping and Grafana visualization. The evidence gallery contains the recorded outputs and screenshot. Teardown of this GKE cluster must be verified separately; do not infer current running infrastructure from historic evidence.
+**Evidence integrity:** K3s and kubeadm test output was captured from real GCP clusters, later destroyed to limit cost. In November 2026, a live GKE lab validated Argo CD synchronization, FastAPI deployments, Prometheus scraping and Grafana visualization. The evidence gallery contains the recorded outputs and screenshot. GKE teardown was verified on 3 November 2026; historic screenshots are evidence of the former deployment, not a currently running service.
 
 ## Run locally
 
@@ -117,7 +117,7 @@ docs/validation/               deployment validation and evidence register
 
 ## Cost controls and lifecycle
 
-Infrastructure is provisioned from Terraform and destroyed after evidence capture. The documented kubeadm lab teardown completed with **10 resources destroyed**, an empty Terraform state and zero Compute Engine instances in the GCP project. Destroying clusters does not erase the committed infrastructure definitions or test evidence.
+Infrastructure was provisioned using Terraform and decommissioned after evidence capture. The earlier kubeadm lab teardown removed **10 managed resources**. The GKE lab was independently verified decommissioned on **3 November 2026**: Terraform reported **2 resources destroyed**, its state was empty, and checks showed no GKE clusters, Compute Engine VMs, disks, reserved IPs, forwarding rules or snapshots. The GCP Secret Manager credential is a separate lifecycle item; this does **not** establish a zero-cost cloud account. [Read the GKE teardown record](docs/evidence/gke/teardown/README.md).
 
 ## Portfolio highlights
 
