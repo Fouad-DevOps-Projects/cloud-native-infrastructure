@@ -21,7 +21,7 @@ A Google Kubernetes Engine **zonal Standard cluster** was provisioned with Terra
 
 [**Open the complete evidence gallery and raw test outputs →**](docs/evidence/gke/README.md)
 
-> **Deployment lifecycle:** The screenshots and Kubernetes outputs record the successful November 2026 deployment. On **3 November 2026**, Terraform destroyed the GKE node pool and cluster (2 resources). Independent checks found an empty Terraform state and no remaining GKE clusters, VMs, persistent disks, reserved IPs, forwarding rules or snapshots. One separately created Secret Manager secret remained and requires separate review. [Teardown verification](docs/evidence/gke/teardown/README.md). No registry credentials are stored in Git.
+> **Deployment lifecycle:** The screenshots and Kubernetes outputs record the successful November 2026 deployment. On **3 November 2026**, Terraform destroyed the GKE node pool and cluster (2 resources). Independent checks found an empty Terraform state and no remaining GKE clusters, VMs, persistent disks, reserved IPs, forwarding rules or snapshots. The separately created Secret Manager secret was subsequently deleted, including its three stored versions. The underlying GHCR token's revocation and project-wide billing status were not verified. [Teardown verification](docs/evidence/gke/teardown/README.md). No registry credentials are stored in Git.
 
 
 ## Architecture
@@ -117,7 +117,7 @@ docs/validation/               deployment validation and evidence register
 
 ## Cost controls and lifecycle
 
-Infrastructure was provisioned using Terraform and decommissioned after evidence capture. The earlier kubeadm lab teardown removed **10 managed resources**. The GKE lab was independently verified decommissioned on **3 November 2026**: Terraform reported **2 resources destroyed**, its state was empty, and checks showed no GKE clusters, Compute Engine VMs, disks, reserved IPs, forwarding rules or snapshots. The GCP Secret Manager credential is a separate lifecycle item; this does **not** establish a zero-cost cloud account. [Read the GKE teardown record](docs/evidence/gke/teardown/README.md).
+Infrastructure was provisioned using Terraform and decommissioned after evidence capture. The earlier kubeadm lab teardown removed **10 managed resources**. The GKE lab was independently verified decommissioned on **3 November 2026**: Terraform reported **2 resources destroyed**, its state was empty, and checks showed no GKE clusters, Compute Engine VMs, disks, reserved IPs, forwarding rules or snapshots. The separately created GCP Secret Manager secret was also deleted, including its three versions. This does **not** establish a zero-cost cloud account or verify revocation of its underlying GHCR token. [Read the GKE teardown record](docs/evidence/gke/teardown/README.md).
 
 ## Portfolio highlights
 

@@ -27,9 +27,15 @@ The managed infrastructure was the `primary` node pool and the `portfolio-gke` c
 
 The corresponding terminal output was captured locally as `docs/evidence/gke/teardown/verification-after.txt`; commit that sanitized raw output separately to preserve the original check.
 
-## Remaining resources and boundaries
+## Subsequent Secret Manager cleanup
 
-`gcloud secrets list` still returned the **separately created** GCP Secret Manager resource `sre-ghcr-dockerconfig`, which was used for GHCR credentials in the SRE lab. It was **not** part of the two Terraform resources and its deletion was **not** verified. Do not publish secret versions or values.
+The first post-teardown `gcloud secrets list` still showed the **separately created** Secret Manager resource `sre-ghcr-dockerconfig`. The operator subsequently ran `gcloud secrets delete sre-ghcr-dockerconfig --project cloud-native-platform-513310`, confirmed the irreversible deletion prompt (which reported **3 versions**), and received:
+
+```text
+Deleted secret [sre-ghcr-dockerconfig].
+```
+
+This confirms deletion of the named GCP secret, not revocation of the original GHCR token or absence of other billable cloud resources. No secret values were published.
 
 These checks confirm removal of the GKE lab and selected Compute Engine resource categories, **not** the complete absence of billable Google Cloud services. Confirm any other independently provisioned resources and review billing separately.
 

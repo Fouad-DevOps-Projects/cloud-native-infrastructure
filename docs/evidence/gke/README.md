@@ -59,4 +59,4 @@ This gallery documents the **real GKE, Argo CD, private GHCR, Prometheus and Gra
 
 **Credential safety:** Do not upload GitHub PATs, `argocd-initial-admin-secret`, kubeconfig, Terraform state, or Grafana passwords. Image pull credentials remain inside Kubernetes and are not stored in Git.
 
-**Teardown verified:** Terraform reported **2 resources destroyed** on 3 November 2026. The state was empty; GCP checks showed no GKE cluster, VM, disk, reserved IP, forwarding rule or snapshot. [Verification and remaining separate secret](teardown/README.md). This does not imply every cloud service or billing item is absent.
+**Teardown verified:** Terraform reported **2 resources destroyed** on 3 November 2026. The state was empty; GCP checks showed no GKE cluster, VM, disk, reserved IP, forwarding rule or snapshot. [Verification and separate secret cleanup](teardown/README.md). This does not imply every cloud service or billing item is absent.

@@ -17,7 +17,7 @@
 
 ## Scope and evidence boundaries
 
-- **GKE teardown verified (3 November 2026):** Terraform destroyed 2 managed resources, its state was empty, and independent GCP checks found no GKE cluster, Compute Engine VM, disk, reserved IP, forwarding rule or snapshot. [Teardown verification](../evidence/gke/teardown/README.md). A separately created Secret Manager secret remains for separate cleanup review.
+- **GKE teardown verified (3 November 2026):** Terraform destroyed 2 managed resources, its state was empty, and independent GCP checks found no GKE cluster, Compute Engine VM, disk, reserved IP, forwarding rule or snapshot. [Teardown verification](../evidence/gke/teardown/README.md). The separately created `sre-ghcr-dockerconfig` secret was subsequently deleted along with its three versions; any underlying GitHub token revocation and other services require separate verification.
 - An alert firing and notification delivery test was not recorded; the Alertmanager Pod was running, but this is not alert-delivery evidence.
 - Precise HTTP downtime or recovery time during the earlier kubeadm worker failure was not continuously measured.
 - A persistent, always-on production deployment is not claimed.
